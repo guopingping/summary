@@ -67,7 +67,195 @@ arr.reduce()或reduceRight()  //缩小数组的方法，迭代数组的所有项
 ```
 
  2. 字符串方法
- 3. 日期方法
+
+ ```javascript
+ let str="abcdefg"
+str.substring(1)			//bcdefg 
+							//substring(start,end):不包含结束位置  str.substring(1,4)= bcd;
+
+str.slice()      			 //slice():和substring类似
+
+// slice和substring的区别：
+	// 	输入参数为负数的时候,
+	// 	substring将负值变为0，小的作为开始位置
+	// 		str.substring(-1,1)=str.substring(0,1)=a
+	// 	slice输入负值的时候，将值与字符串长度相加,若绝对值大于字符串长度，则取0
+	// 		str.slice(1,-3)=str.slice(1,4)=bcd
+	// 		str.slice(-9)=str.slice(0)=abcdefg
+
+str.substr(1，2)				//substr(start,end):start开始位置，end需要返回的字符串的个数；ab
+								//substr(1) abcdefg
+								//输入负值，值与字符串长度相加，end为负值时，值为0；
+					
+str.charAt(1)					//charAt(index):返回指定索引处的字符.b 
+								//超出有效范围，返回空；
+
+str.indexOf('a')				//indexOf(String):返回string对象内，第一次出现子字符串的位置. 0
+								//如果没有出现，返回-1；
+				
+str.lastIndexOf()				//倒序查找
+
+let str="abcadaef"
+str.split('a')					//split():将字符串以参数分隔为数组。["", "bc", "d", "ef"];
+
+str.toLowerCase()				//转换为小写；
+str.toUpperCase()				//转换为大写；"ABCADAEF"
+
+let a="xyz"
+let b="abc"
+a.concat(b)						//concat():连接字符串。xyzabc；
+
+
+```
+
+ 3.常见的日期方法
+
+```JavaScript
+ -1） Moment.js
+ 	moment官网有很多比较简洁和实用的写法可供参考。(http://momentjs.cn)
+ 	不过需要首先安装moment插件
+ 		npm install moment
+ 	引用
+ 		import moment from "moment"
+ 
+ 
+ - 2）Date
+ 	date官网也有很多原始的方法可以获取想要的日期。（https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Date）
+ 	
+ 	
+ -3） JavaScript
+ 	/**********获取两个时间间隔的月份 *****************/
+ 	function getDate(start,end){
+	 	var result = [];
+	    var s = start.split("-");
+	    var e = end.split("-");
+	    var min = new Date();
+	    var max = new Date();
+	    min.setFullYear(s[0], s[1]);
+	    max.setFullYear(e[0], e[1]);
+	    var curr = min;
+	    while (curr <= max) {
+	        var month = curr.getMonth();
+	        if (month > 0 && month <= 9) { month = "0" + month }
+	        var str = curr.getFullYear() + "-" + (month);
+	        var s = curr.getFullYear() + "-0";
+	        if (str == s) {
+	            str = curr.getFullYear() + "-12";
+	        }
+	        result.push(str);
+	        curr.setMonth(curr.getMonth() + 1);
+	    }
+    	return result
+    }
+
+	/**************获取两个日期间的所有日期,默认start<end ***************/
+	Date.prototype.format = function() {
+	    var s = '';
+	    var mouth = (this.getMonth() + 1) >= 10 ? (this.getMonth() + 1) : ('0' + (this.getMonth() + 1));
+	    var day = this.getDate() >= 10 ? this.getDate() : ('0' + this.getDate());
+	    s += this.getFullYear() + '-'; // 获取年份。
+	    s += mouth + "-"; // 获取月份。
+	    s += day; // 获取日。
+	    return (s); // 返回日期。
+	};
+	function getDiffDate(begin, end) {
+	    var result = []
+	    var ab = begin.split("-");
+	    var ae = end.split("-");
+	    var db = new Date();
+	    db.setUTCFullYear(ab[0], ab[1] - 1, ab[2]);
+	    var de = new Date();
+	    de.setUTCFullYear(ae[0], ae[1] - 1, ae[2]);
+	    var unixDb = db.getTime();
+	    var unixDe = de.getTime();
+	    for (var k = unixDb; k <= unixDe;) {
+	        result.push(
+	            new Date(parseInt(k)).format());
+	        k = k + 24 * 60 * 60 * 1000;
+	    }
+	    return result
+	}
+	
+	/**************格式化日期******************/
+	function getFormatDate(date, fmt) { 
+	    var o = {
+	        "M+": date.getMonth() + 1, //月份 
+	        "d+": date.getDate(), //日 
+	        "h+": date.getHours(), //小时 
+	        "m+": date.getMinutes(), //分 
+	        "s+": date.getSeconds(), //秒 
+	        "q+": Math.floor((date.getMonth() + 3) / 3), //季度 
+	        "S": date.getMilliseconds() //毫秒 
+	    };
+	    if (/(y+)/.test(fmt))
+	     	fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+	    for (var k in o)
+	        if (new RegExp("(" + k + ")").test(fmt)) 
+	        	fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	    return fmt;
+	}
+	
+	/***************比较时间*********************/
+	 function compareTime(date1, date2) {
+	    var start_time = date1.replace(new RegExp("-", "gm"), "/");
+	    var end_time = date2.replace(new RegExp("-", "gm"), "/");
+	    var starttime = (new Date(start_time)).getTime(); //得到毫秒数
+	    var endtime = (new Date(end_time)).getTime(); //得到毫秒数
+	    return (starttime < endtime) ? true : false;
+	}
+
+```
+
+4.常见的正则校验
+
+```JavaScript
+//处理特殊字符  正则校验
+//只能输入汉字
+let reg = "^[\u4e00-\u9fa5]{0,}$";
+
+//url校验
+let reg = "^http://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?$";
+
+//tel校验
+let reg  = "^(\d{3,4}-)\d{7,8}$";
+
+//匹配首尾空格
+let reg = "(^\s*)|(\s*$)";
+
+//去除两边的空格
+function deleteTrims(ctx) {
+    return ctx.replace(/(^\s*)|(\s*$)/g, "");
+}
+
+//按照固定位数，从左边不足补0
+function PadLeft(str, len, c) {
+    while (str.length < len) {
+        str = c + str;
+    }
+    return str;
+}
+
+//删除前面为0的字符窜
+function deleteLeft (str, c) {
+        var num;
+        for (var s = 0; s < str.length; s++) {
+           if (str.charAt(s) !== c) {
+               num = str.substr(s);
+               break;
+         }
+      }
+ 	return num
+ }
+ 
+//特殊字符窜（验证是否含有^%&',;=?$"等字符）
+let reg  = "[^%&',;=?$]+";
+
+//匹配首尾空白字符(可以用来删除行首行尾的空白字符(包括空格、制表符、换页符等等)
+let reg = "^\s*|\s*$";
+
+```
+
+
 
 
   未完待续...
