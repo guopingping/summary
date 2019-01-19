@@ -36,6 +36,48 @@
 		![string使用](https://img-blog.csdnimg.cn/20190116225059670.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21vXzI0Nw==,size_16,color_FFFFFF,t_70)
 	
 	2） List
-	list
+        redis列表，按照插入顺序可以添加一个元素到列表的头部或尾部。
+
+        rpush：将给定值推入列表的右端；
+        lrange：获取列表在指定范围上的所有值；
+        lindex：获取列表在指定范围上的单个元素；
+
+        使用场景：
+            多任务调度队列；
+
+    3）Set
+        string类型的无序集合。集合是通过哈希表实现的，增删查复杂度都是O(1)
+
+        sadd：将给定元素添加到集合；
+        smembers：返回集合包含的所有元素；
+        sismember：检查指定元素是否存在于集合中；
+
+        使用场景：
+            微博关注数。
+
+    4）hash
+        键值对集合。是string类型的field和value的映射表，适用于存储对象。
+
+        hset：散列里面关联起指定的键值对；
+        hget：获取指定散列键的值；
+        hgetall：散列包含的所有键值对
+        hdel：如果给定键存在于散列中，移出这个键；
+
+        使用场景：
+            购物车
+
+    5）zset
+        集合，不允许重复的成员。每个元素都会关联一个double类型的分数。
+        redis通过分数来为集合中成员进行从小到大的排序。
+        zset的成员是唯一的，但分数却可以重复。
+
+        zadd：将一个带有给定分值的成员添加到有序集合里面；
+        zrange：根据元素在有序排列中所处的位置，从有序集合里面获取多个元素；
+        zrangebyscore：获取有序集合在给定分值范围内的所有元素；
+        zrem：如果指定成员存在于有序集合中，那么移出这个成员
+
+        使用场景
+            排行榜
+
 ---
  #### 2. 如何使用Redis？
